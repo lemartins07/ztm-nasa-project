@@ -2,6 +2,8 @@ const fs = require('node:fs')
 const path = require('node:path')
 const { parse } = require('csv-parse')
 
+const planets = require('./planets.mongo')
+
 const habitablePlanets = []
 
 function isHabitablePlanet(planet) {
@@ -29,9 +31,10 @@ function loadPlanetsData() {
           columns: true,
         }),
       )
-      .on('data', (data) => {
+      .on('data', async (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanets.push(data)
+          // TODO: use upsert
+          // await planets.create(data)
         }
       })
       .on('error', (err) => {
